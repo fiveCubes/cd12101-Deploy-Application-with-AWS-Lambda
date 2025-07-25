@@ -1,10 +1,11 @@
 import Axios from 'axios'
 import jsonwebtoken from 'jsonwebtoken'
 import { createLogger } from '../../utils/logger.mjs'
+import jwkToPem from 'jwk-to-pem'
 
 const logger = createLogger('auth')
 
-const jwksUrl = 'https://test-endpoint.auth0.com/.well-known/jwks.json'
+const jwksUrl = `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
 
 export async function handler(event) {
   try {
@@ -21,6 +22,9 @@ export async function handler(event) {
             Resource: '*'
           }
         ]
+      },
+      context:{
+        userId: jwtToken.sub,
       }
     }
   } catch (e) {
@@ -47,7 +51,16 @@ async function verifyToken(authHeader) {
   const jwt = jsonwebtoken.decode(token, { complete: true })
 
   // TODO: Implement token verification
-  return undefined;
+
+  if (!jwt) throw new Error('Invalid token')
+  const kid = jwt.header.kid
+  const jwks = await Axios.get(jwksUrl)
+  const signingKey = jwks.data.keys.find(key => key.kid === kid)
+
+  if (!signingKey) throw new Error('Invalid signing key')
+  const pem = jwkToPem(signingKey)
+  return jsonwebtoken.verify(token, pem, { algorithms: ['RS256'] })
+
 }
 
 function getToken(authHeader) {
