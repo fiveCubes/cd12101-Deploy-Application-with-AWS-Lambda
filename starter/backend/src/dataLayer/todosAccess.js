@@ -13,4 +13,30 @@ const createTodoItem = async (todoItem) => {
   })
 }
 
-export { createTodoItem }
+const updateTodoItem = async (todoItem) => {
+  await dynamoDbClient.update({
+    TableName: process.env.TODO_TABLE,
+    Key: {
+      userId: todoItem.userId,
+      todoId: todoItem.todoId,
+    },
+    UpdateExpression: 'SET done = :done',
+    ExpressionAttributeValues: {
+      ':done': todoItem.done,
+    },
+
+  })
+
+}
+
+const deleteTodoItem = async (todoItem) => {
+  await dynamoDbClient.delete({
+    TableName: process.env.TODO_TABLE,
+    Key: {
+      userId: todoItem.userId,
+      todoId: todoItem.todoId,
+    },
+  })
+}
+
+export { createTodoItem, updateTodoItem, deleteTodoItem }
