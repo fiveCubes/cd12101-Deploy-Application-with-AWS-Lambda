@@ -6,7 +6,7 @@ export async function handler(event) {
   const updatedTodo = JSON.parse(event.body)
   const userId = event.requestContext.authorizer.userId
 
-  const todoItem = await updateTodo(todoId, updatedTodo, userId)
+  const todoItem = await updateTodo(userId, todoId, updatedTodo)
 
   return {
     statusCode: 200,
