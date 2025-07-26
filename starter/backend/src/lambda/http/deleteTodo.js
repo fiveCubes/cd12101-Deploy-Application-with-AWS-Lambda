@@ -5,7 +5,7 @@ import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 const s3Client = new S3Client({ region: process.env.AWS_REGION })
 import AWSXRay from 'aws-xray-sdk-core'
 
-const dynamoDbClient = DynamoDBDocument.from(AWSXRay.captureAWSClient(new DynamoDB()))
+const dynamoDbClient = DynamoDBDocument.from(AWSXRay.captureAWSv3Client(new DynamoDB()))
 
 
 export async function handler(event) {

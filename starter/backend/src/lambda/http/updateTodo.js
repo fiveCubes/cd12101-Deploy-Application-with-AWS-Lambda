@@ -3,7 +3,7 @@ import {DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
 import AWSXRay from 'aws-xray-sdk-core'
 
-const dynamoDbClient = DynamoDBDocument.from(AWSXRay.captureAWSClient(new DynamoDB()))
+const dynamoDbClient = DynamoDBDocument.from(AWSXRay.captureAWSv3Client(new DynamoDB()))
 
 export async function handler(event) {
   const todoId = event.pathParameters.todoId

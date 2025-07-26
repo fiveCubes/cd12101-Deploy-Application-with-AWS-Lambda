@@ -1,0 +1,8 @@
+{
+  "title": "CreateTodoRequest",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" }
+  },
+  "required": ["name"]
+}
