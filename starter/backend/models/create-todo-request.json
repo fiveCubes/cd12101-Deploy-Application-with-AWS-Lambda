@@ -2,7 +2,8 @@
   "title": "CreateTodoRequest",
   "type": "object",
   "properties": {
-    "name": { "type": "string" }
+    "name": { "type": "string" , "minLength": 1, "maxLength": 100 }
+
   },
   "required": ["name"]
 }
